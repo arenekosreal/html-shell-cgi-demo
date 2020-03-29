@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>注册</title>
+    </head>
+    <style type="text/css">
+        .inputbox{
+            font-size: 15px;
+        }
+        .text{
+            display:inline-block;
+            text-align: right;
+            width:80px;
+        }
+        .submit_data{
+            width:300px;
+            left:70px;
+            border: 1px;
+            border-color: rgba(0, 153, 204, 0.3);
+            border-radius: 5px;
+            background: rgba(0, 183, 234, 0.8)
+        }
+        .submit_data:hover{
+            background: rgba(0, 183, 234, 0.5);
+        }
+        .title{
+            font-weight:bolder;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
+    <script>
+        function checkpwd(){
+            var pwdstatus=document.getElementByID("pwdstatus");
+            var firstpwd=document.getElementById("pwd1").value;
+            var secondpwd=document.getElementById("pwd2").value;
+                if (firstpwd == secondpwd){
+                    pwdstatus.innerHTML="<font color=green>√两次密码一致!</font>";
+                }else{
+                    pwdstatus.innerHTML="<font color=red>×两次密码不一致，请检查!</font>"
+                }
+        }
+    </script>
+    <body style="background-color: rgba(0, 153, 204, 0.6);">
+        <div style="font-weight:bold;font-family:YouYuan,'Microsoft YaHei',SimSun;position:fixed;background:rgb(0,153,204);left:0px;right:0px;height:226px;margin-left:auto;margin-right:auto;top:300px;text-align:center;">
+            <br/>
+            <label class="title">输入你想要的用户名和密码：</label><br/><br/>
+            <form action="core.sh" method="POST">
+                <label class="text">用户名:</label><input type="text" name="username" placeholder="在这里输入想要的名字" class="inputbox" required="true"><br/>
+                <label class="text">密码:</label><input type="password" name="pwd" id="pwd1" placeholder="在这里输入想要的密码" class="inputbox" required="true"><br/>
+                <label class="text">重复密码:</label><input type="password" name="pwd2" id="pwd2" placeholder="再次输入上面的密码以确认" class="inputbox" required="true"><label id="pwdstatus"></label><br/><br/>
+                <input type="submit" value="提交" class="submit_data"/>
+            </form>
+        </div>
+    </body>
+</html>
