@@ -1,18 +1,29 @@
 #!/bin/bash
 poststr=`cat`
-#poststr="username=zhanghua&pwd=zhddn2000.3.26&pwd2=zhddn2000.3.26"
+# Get data from Client, Use POST method.
+# Data format: username=abc&pwd=def&pwd2=def
 decodestr=$(printf $(echo -n $poststr | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g'))
+# Decode URL
 username=$(echo -n $decodestr | cut -d \& -f 1)
+# Get username=abc
 pwdstr=$(echo -n $decodestr | cut -d \& -f 2)
+# Get pwd=def
 pwd2str=$(echo -n $decodestr | cut -d \& -f 3)
+# Get pwd2=def
 usernamevalue=$(echo -n $username | cut -d \= -f 2)
+# Split $username to get value 'abc'
 pwdvalue=$(echo -n $pwdstr | cut -d \= -f 2)
+# Split $pwd to get value 'def'
 pwd2value=$(echo -n $pwd2str | cut -d \= -f 2)
+# Split $pwd2 to get value 'def'
 user=$(echo -n $(echo -n $usernamevalue | sed 's/+/ /g'))
+# Replace '+' with ' '
 realm="Downloads"
+# This Must match what you wrote in auth module config file
 pwd=$(echo -n $(echo -n $pwdvalue | sed 's/+/ /g'))
 pwd2=$(echo -n $(echo -n $pwd2value | sed 's/+/ /g'))
 if [ "$pwd" == "$pwd2" ] && [ `grep -c "$user" /etc/lighttpd/lighttpd.user` -eq '0' ]
+# /etc/lighttpd/lighttpd.user is user data file of lighttpd auth module, with htdigest method
 then
     hash=$(echo -n "$user:$realm:$pass" | md5sum | cut -b -32)
     text="$user:$realm:$hash"
