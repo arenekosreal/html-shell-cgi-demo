@@ -2,14 +2,18 @@
 poststr=`cat`
 # Get data from Client, Use POST method.
 # Data format: username=abc&pwd=def&pwd2=def
-decodestr=$(printf $(echo -n $poststr | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g'))
-# Decode URL
-username=$(echo -n $decodestr | cut -d \& -f 1)
+username=$(echo -n $poststr | cut -d \& -f 1)
 # Get username=abc
-pwdstr=$(echo -n $decodestr | cut -d \& -f 2)
+username=$(printf $(echo -n $username | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g'))
+# Decode username
+pwdstr=$(echo -n $poststr | cut -d \& -f 2)
 # Get pwd=def
-pwd2str=$(echo -n $decodestr | cut -d \& -f 3)
-# Get pwd2=def
+pwdstr=$(printf $(echo -n $pwdstr | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g'))
+# Decode pwd
+pwd2str=$(echo -n $poststr | cut -d \& -f 3)
+# Get pwd2=pwd2
+pwd2str=$(printf $(echo -n $pwd2str | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g'))
+# Decode username
 usernamevalue=$(echo -n $username | cut -d \= -f 2)
 # Split $username to get value 'abc'
 pwdvalue=$(echo -n $pwdstr | cut -d \= -f 2)
