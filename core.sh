@@ -3,29 +3,29 @@ poststr=`cat`
 # Get data from Client, Use POST method.
 # Data format: username=abc&pwd=def&pwd2=def
 username=$(echo -n $poststr | cut -d \& -f 1)
-# Get username=abc
-username=$(printf $(echo -n $username | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g'))
-# Decode username
+# Get decoded username=abc
 pwdstr=$(echo -n $poststr | cut -d \& -f 2)
-# Get pwd=def
-pwdstr=$(printf $(echo -n $pwdstr | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g'))
-# Decode pwd
+# Get decoded pwd=def
 pwd2str=$(echo -n $poststr | cut -d \& -f 3)
-# Get pwd2=pwd2
-pwd2str=$(printf $(echo -n $pwd2str | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g'))
-# Decode username
+# Get decoded pwd2=pwd2
 usernamevalue=$(echo -n $username | cut -d \= -f 2)
-# Split $username to get value 'abc'
+# Split $username to get decoded value 'abc'
 pwdvalue=$(echo -n $pwdstr | cut -d \= -f 2)
-# Split $pwd to get value 'def'
+# Split $pwd to get decoded value 'def'
 pwd2value=$(echo -n $pwd2str | cut -d \= -f 2)
-# Split $pwd2 to get value 'def'
+# Split $pwd2 to get decoded value 'def'
 user=$(echo -n $(echo -n $usernamevalue | sed 's/+/ /g'))
 # Replace '+' with ' '
 realm="Downloads"
 # This Must match what you wrote in auth module config file
 pwd=$(echo -n $(echo -n $pwdvalue | sed 's/+/ /g'))
 pwd2=$(echo -n $(echo -n $pwd2value | sed 's/+/ /g'))
+user=$(printf $(echo -n $user | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g'))
+# Decode user
+pwd=$(printf $(echo -n $pwd | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g'))
+# Decode pwd
+pwd2=$(printf $(echo -n $pwd2 | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g'))
+# Decode pwd2
 if [ "$pwd" == "$pwd2" ] && [ `grep -c "$user" /etc/lighttpd/lighttpd.user` -eq '0' ]
 # /etc/lighttpd/lighttpd.user is user data file of lighttpd auth module, with htdigest method
 then
